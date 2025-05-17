@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FounderUser, Industry, Skill } from '@/types';
 import { MapPin, MessageSquare, User, Users, Globe } from 'lucide-react';
 import { industryOptions, skillOptions, stageOptions } from '@/data/mockData';
+import { Link } from 'react-router-dom';
 
 interface ProfileCardProps {
   user: FounderUser;
@@ -196,7 +197,9 @@ const ProfileCard = ({ user, compact = false, onMessageClick }: ProfileCardProps
         )}
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline">View Profile</Button>
+        <Button variant="outline" asChild>
+          <Link to={`/profile/${user.id}`}>View Profile</Link>
+        </Button>
         <Button onClick={() => onMessageClick?.(user.id)}>
           <MessageSquare size={16} className="mr-2" /> Message
         </Button>
