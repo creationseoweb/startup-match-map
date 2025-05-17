@@ -1,18 +1,63 @@
 
 import { useUser } from '@/context/UserContext';
 import { Button } from '@/components/ui/button';
-import ProfileCard from '@/components/ProfileCard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Edit3, MapPin, Briefcase, Calendar, Link } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { industryOptions, skillOptions, stageOptions } from '@/data/mockData';
 import { Skill, Industry } from '@/types';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { useEffect, useRef } from 'react';
+
+// Temporary Mapbox token for development - in production, use environment variables
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiZXhhbXBsZXVzZXIiLCJhIjoiY2xnYnptbHFxMDI3dTNkcGRraHFxaXQ1eCJ9.r6ycVk6fXBzCYvk1k5_6vA';
+
+// Tell TypeScript to trust us that the token will be available at runtime
+mapboxgl.accessToken = MAPBOX_TOKEN || '';
 
 const MyProfile = () => {
   const { currentUser } = useUser();
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+
+  // Initialize map when component mounts
+  useEffect(() => {
+    if (!currentUser?.location || !mapContainer.current || map.current) return;
+
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [currentUser.location.longitude, currentUser.location.latitude],
+      zoom: 10,
+      attributionControl: false
+    });
+
+    // Add navigation controls
+    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    // Add a marker for the user's location
+    const el = document.createElement('div');
+    el.className = `marker-${currentUser.role} pulse-animation border-2 border-white`;
+    el.style.width = '24px';
+    el.style.height = '24px';
+    el.style.borderRadius = '50%';
+    el.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.1)';
+    el.style.animation = 'pulse-light 2s infinite';
+
+    new mapboxgl.Marker(el)
+      .setLngLat([currentUser.location.longitude, currentUser.location.latitude])
+      .addTo(map.current);
+
+    return () => {
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
+    };
+  }, [currentUser]);
   
   if (!currentUser) {
     return (
@@ -135,6 +180,21 @@ const MyProfile = () => {
               </CardContent>
             </Card>
           )}
+          
+          {/* Map Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin size={18} /> My Location
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div 
+                ref={mapContainer} 
+                className="w-full h-64 rounded-lg overflow-hidden border border-border"
+              />
+            </CardContent>
+          </Card>
         </div>
         
         {/* Sidebar */}
