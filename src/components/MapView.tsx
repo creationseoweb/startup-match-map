@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { useUser } from '@/context/UserContext';
 import { FounderUser } from '@/types';
 import ProfileCard from './ProfileCard';
+import { createRoot } from 'react-dom/client';
 
 // Temporary Mapbox token for development - in production, use environment variables
 // This would be replaced with an API key form in production
@@ -104,6 +105,12 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
       // Create marker element
       const el = document.createElement('div');
       el.className = `marker-${user.role}`;
+      el.style.width = '16px';
+      el.style.height = '16px';
+      el.style.borderRadius = '50%';
+      el.style.backgroundColor = getRoleColor(user.role);
+      el.style.border = '2px solid white';
+      el.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.1)';
       
       // Create and add the marker
       const marker = new mapboxgl.Marker(el)
@@ -159,16 +166,61 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
       popupNode.removeChild(popupNode.firstChild);
     }
 
-    // Render mini profile card in popup
-    const root = createRoot(popupNode);
-    root.render(
-      <ProfileCard user={selectedUser} compact />
-    );
+    // Create a temporary div for our React component
+    const mountNode = document.createElement('div');
+    mountNode.style.minWidth = '200px';
+    popupNode.appendChild(mountNode);
+
+    // Use React's createRoot API for React 18
+    try {
+      const root = createRoot(mountNode);
+      root.render(<ProfileCard user={selectedUser} compact />);
+    } catch (error) {
+      console.error('Error rendering React component in popup:', error);
+      mountNode.innerHTML = `
+        <div class="p-2 text-center">
+          <div class="font-medium">${selectedUser.name}</div>
+          <div class="text-sm text-muted-foreground">${selectedUser.role}</div>
+        </div>
+      `;
+    }
   }, [selectedUser]);
+
+  // Helper function to get color based on role
+  const getRoleColor = (role: string) => {
+    switch (role.toLowerCase()) {
+      case 'developer':
+        return '#3b82f6'; // blue-500
+      case 'designer':
+        return '#ec4899'; // pink-500
+      case 'business':
+        return '#10b981'; // emerald-500
+      case 'marketing':
+        return '#f59e0b'; // amber-500
+      default:
+        return '#6366f1'; // indigo-500
+    }
+  };
 
   return (
     <div className="relative w-full h-full rounded-lg overflow-hidden border border-border">
       <div ref={mapContainer} className="absolute inset-0" />
+      <style jsx>{`
+        .pulse-animation {
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+          }
+        }
+      `}</style>
       {!MAPBOX_TOKEN && (
         <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-50">
           <div className="max-w-md p-6 text-center">
@@ -180,24 +232,5 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
     </div>
   );
 };
-
-// Helper function to create React roots for popups
-function createRoot(container: Element) {
-  // This is a simplified version as we don't have ReactDOM.createRoot
-  return {
-    render: (component: React.ReactNode) => {
-      // In a real implementation, we would use ReactDOM.createRoot
-      // For the prototype, we'll create a placeholder
-      const div = document.createElement('div');
-      div.innerHTML = `
-        <div class="w-72 p-4">
-          <div class="text-center font-medium">User Profile Card</div>
-          <p class="text-sm text-gray-500">This would render a React component in production</p>
-        </div>
-      `;
-      container.appendChild(div);
-    }
-  };
-}
 
 export default MapView;
