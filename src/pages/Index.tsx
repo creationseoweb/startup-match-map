@@ -43,7 +43,7 @@ const Index = () => {
       
       <main className="flex-1 flex flex-col h-[calc(100vh-64px)]">
         <div className="flex-1 flex md:flex-row flex-col h-full">
-          <Tabs defaultValue="map" className="flex-1 flex flex-col h-full">
+          <Tabs defaultValue="map" className="flex-1 flex flex-col h-full overflow-hidden">
             <div className="px-4 pt-4 flex justify-between items-center">
               <TabsList>
                 <TabsTrigger value="map" className="flex items-center gap-1">
@@ -59,13 +59,13 @@ const Index = () => {
               </Button>
             </div>
             
-            <TabsContent value="map" className="flex-1 p-4 pt-0 h-full">
-              <div className="h-full w-full">
+            <TabsContent value="map" className="flex-1 p-4 pt-0 h-full overflow-hidden">
+              <div className="h-full w-full rounded-lg">
                 <MapView onUserSelect={handleUserSelect} />
               </div>
             </TabsContent>
             
-            <TabsContent value="list" className="flex-1 p-4 pt-0">
+            <TabsContent value="list" className="flex-1 p-4 pt-0 overflow-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* This would be populated with founder cards */}
                 <div className="col-span-full text-center p-8 text-muted-foreground">
@@ -75,9 +75,9 @@ const Index = () => {
             </TabsContent>
           </Tabs>
           
-          {/* Selected user profile panel - make it smaller and collapsible to give more space to map */}
+          {/* Selected user profile panel - make it smaller to give more space to map */}
           {selectedUser && (
-            <div className="w-80 border-l border-border p-4 overflow-y-auto animate-fade-in hidden md:block">
+            <div className="w-72 border-l border-border p-4 overflow-y-auto animate-fade-in hidden md:block">
               <ProfileCard 
                 user={selectedUser} 
                 onMessageClick={() => handleMessageUser(selectedUser)} 

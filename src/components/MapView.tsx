@@ -27,8 +27,8 @@ const createCustomIcon = (role: string, isPulsing: boolean = false): L.DivIcon =
       height: 100%;
       box-shadow: 0 0 0 2px rgba(0,0,0,0.1);"
     ></div>`,
-    iconSize: isPulsing ? [28, 28] : [20, 20], // Slightly larger markers
-    iconAnchor: isPulsing ? [14, 14] : [10, 10],
+    iconSize: isPulsing ? [32, 32] : [24, 24], // Larger markers for better visibility
+    iconAnchor: isPulsing ? [16, 16] : [12, 12],
   });
 };
 
@@ -53,8 +53,8 @@ const FlyToUserLocation = ({ position }: { position: [number, number] }) => {
   const map = useMap();
   
   useEffect(() => {
-    map.flyTo(position, 4, { // Zoom level 4 for a better view
-      duration: 2
+    map.flyTo(position, 3, { 
+      duration: 1.5
     });
   }, [map, position]);
   
@@ -65,6 +65,7 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
   const { allExceptCurrent, currentUser } = useUser();
   const [selectedUser, setSelectedUser] = useState<FounderUser | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const mapRef = useRef(null);
 
   const handleMarkerClick = (user: FounderUser) => {
     setSelectedUser(user);
@@ -83,13 +84,21 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
   };
 
   useEffect(() => {
-    // Set mapReady after a short delay to ensure proper rendering
+    console.log("MapView mounted, initializing map");
+    
+    // Force re-render to ensure the map container is properly sized
     const timer = setTimeout(() => {
+      console.log("Setting mapReady to true");
       setMapReady(true);
-    }, 100);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
+
+  if (!mapReady) {
+    console.log("Map not ready yet, rendering placeholder");
+    return <div className="w-full h-full bg-muted rounded-lg flex items-center justify-center">Loading map...</div>;
+  }
 
   return (
     <div className="relative w-full h-full rounded-lg overflow-hidden border border-border">
@@ -98,6 +107,7 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           .leaflet-container {
             width: 100%;
             height: 100%;
+            z-index: 1;
           }
           
           .pulse-animation {
@@ -109,7 +119,7 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
               box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
             }
             70% {
-              box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
+              box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
             }
             100% {
               box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
@@ -118,8 +128,8 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           
           .leaflet-popup-content-wrapper {
             border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 240px;
           }
           
           .leaflet-popup-content {
@@ -143,6 +153,7 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
         style={{ height: '100%', width: '100%' }}
         zoomControl={false}
         attributionControl={false}
+        ref={mapRef}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -150,12 +161,12 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
         />
         
         {/* Add zoom control to top-right */}
-        {mapReady && <div className="leaflet-top leaflet-right">
+        <div className="leaflet-top leaflet-right">
           <div className="leaflet-control-zoom leaflet-bar leaflet-control">
             <a className="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in">+</a>
             <a className="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out">−</a>
           </div>
-        </div>}
+        </div>
         
         {/* Current user marker with pulse animation */}
         {currentUser?.location && (
