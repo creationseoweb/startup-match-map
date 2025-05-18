@@ -9,6 +9,7 @@ import ProfileCard from '@/components/ProfileCard';
 import MessagingSidebar from '@/components/MessagingSidebar';
 import ChatDialog from '@/components/ChatDialog';
 import FilterSidebar from '@/components/FilterSidebar';
+import ListView from '@/components/ListView';
 import { Filter, Map, Users } from 'lucide-react';
 
 const Index = () => {
@@ -66,12 +67,10 @@ const Index = () => {
             </TabsContent>
             
             <TabsContent value="list" className="flex-1 p-4 pt-0 overflow-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* This would be populated with founder cards */}
-                <div className="col-span-full text-center p-8 text-muted-foreground">
-                  List view to be implemented
-                </div>
-              </div>
+              <ListView 
+                onUserSelect={handleUserSelect} 
+                onMessageClick={handleMessageUser}
+              />
             </TabsContent>
           </Tabs>
           
