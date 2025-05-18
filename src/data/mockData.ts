@@ -1,4 +1,3 @@
-
 import { FounderUser, Industry, Skill, StartupStage, UserRole } from '@/types';
 
 // Generate a set of mock founders for our application
@@ -174,6 +173,136 @@ export const mockFounders: FounderUser[] = [
     website: 'https://borderpay.example.com',
     linkedIn: 'ahmedhassan',
     github: 'ahassantech'
+  },
+  {
+    id: '9',
+    name: 'Sophia Lee',
+    role: 'founder',
+    avatar: '/placeholder.svg',
+    location: {
+      longitude: 139.6917,
+      latitude: 35.6895,
+      city: 'Tokyo',
+      country: 'Japan'
+    },
+    skills: ['engineering', 'product', 'design'],
+    industries: ['ai', 'software'],
+    bio: 'AI researcher with focus on computer vision. Building an AI platform for retail analytics.',
+    startupName: 'RetailVision',
+    startupDescription: 'Computer vision platform that helps retailers optimize store layouts and customer journeys.',
+    startupStage: 'seed',
+    lookingFor: ['marketing', 'sales', 'finance'],
+    website: 'https://retailvision.example.com',
+    linkedIn: 'sophialee',
+    twitter: 'sophia_ai',
+    github: 'sophialeecode'
+  },
+  {
+    id: '10',
+    name: 'Marcus Johnson',
+    role: 'founder',
+    avatar: '/placeholder.svg',
+    location: {
+      longitude: 18.0686,
+      latitude: 59.3293,
+      city: 'Stockholm',
+      country: 'Sweden'
+    },
+    skills: ['engineering', 'product'],
+    industries: ['cleantech', 'hardware'],
+    bio: 'Former Tesla engineer focused on sustainable energy solutions. Building smart home energy management systems.',
+    startupName: 'EcoHome',
+    startupDescription: 'IoT platform for optimizing home energy consumption and integrating renewable energy sources.',
+    startupStage: 'pre-seed',
+    lookingFor: ['design', 'marketing', 'operations'],
+    website: 'https://ecohome.example.com',
+    linkedIn: 'marcusjohnson',
+    twitter: 'marcus_energy',
+    github: 'marcusj'
+  },
+  {
+    id: '11',
+    name: 'Priya Sharma',
+    role: 'founder',
+    avatar: '/placeholder.svg',
+    location: {
+      longitude: 77.2090,
+      latitude: 28.6139,
+      city: 'New Delhi',
+      country: 'India'
+    },
+    skills: ['design', 'marketing', 'product'],
+    industries: ['edtech'],
+    bio: 'UX designer passionate about making education accessible. Building a platform to connect rural students with global educators.',
+    startupName: 'EduConnect',
+    startupDescription: 'Mobile-first platform bringing quality education to underserved communities through low-bandwidth solutions.',
+    startupStage: 'mvp',
+    lookingFor: ['engineering', 'operations', 'finance'],
+    website: 'https://educonnect.example.com',
+    linkedIn: 'priyasharma',
+    twitter: 'priya_edutech'
+  },
+  {
+    id: '12',
+    name: 'Daniel Nguyen',
+    role: 'investor',
+    avatar: '/placeholder.svg',
+    location: {
+      longitude: -123.1207,
+      latitude: 49.2827,
+      city: 'Vancouver',
+      country: 'Canada'
+    },
+    skills: ['finance', 'operations'],
+    industries: ['software', 'ai', 'fintech'],
+    bio: 'VC partner with focus on early-stage tech startups. Previously founded and exited two SaaS companies.',
+    lookingFor: ['engineering', 'product'],
+    linkedIn: 'danielnguyen',
+    twitter: 'daniel_vc'
+  },
+  {
+    id: '13',
+    name: 'Fatima Al-Hassan',
+    role: 'founder',
+    avatar: '/placeholder.svg',
+    location: {
+      longitude: 3.3792,
+      latitude: 6.5244,
+      city: 'Lagos',
+      country: 'Nigeria'
+    },
+    skills: ['operations', 'finance', 'product'],
+    industries: ['fintech'],
+    bio: 'Fintech entrepreneur focused on microfinance solutions for small businesses in Africa.',
+    startupName: 'MicroFund',
+    startupDescription: 'Mobile platform connecting small businesses with microloans and financial education resources.',
+    startupStage: 'seed',
+    lookingFor: ['engineering', 'marketing', 'sales'],
+    website: 'https://microfund.example.com',
+    linkedIn: 'fatimaalhassan',
+    twitter: 'fatima_fintech'
+  },
+  {
+    id: '14',
+    name: 'Javier Moreno',
+    role: 'founder',
+    avatar: '/placeholder.svg',
+    location: {
+      longitude: -3.7038,
+      latitude: 40.4168,
+      city: 'Madrid',
+      country: 'Spain'
+    },
+    skills: ['engineering', 'product'],
+    industries: ['software', 'fintech'],
+    bio: 'Full-stack developer building open banking solutions for European markets.',
+    startupName: 'OpenBank',
+    startupDescription: 'API platform simplifying integration between financial institutions and fintech applications.',
+    startupStage: 'series-a',
+    lookingFor: ['design', 'marketing', 'sales'],
+    website: 'https://openbank.example.com',
+    linkedIn: 'javiermoreno',
+    github: 'javierdev'
   }
 ];
 
