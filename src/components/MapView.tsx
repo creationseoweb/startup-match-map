@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -26,8 +27,8 @@ const createCustomIcon = (role: string, isPulsing: boolean = false): L.DivIcon =
       height: 100%;
       box-shadow: 0 0 0 2px rgba(0,0,0,0.1);"
     ></div>`,
-    iconSize: isPulsing ? [24, 24] : [16, 16],
-    iconAnchor: isPulsing ? [12, 12] : [8, 8],
+    iconSize: isPulsing ? [28, 28] : [20, 20], // Slightly larger markers
+    iconAnchor: isPulsing ? [14, 14] : [10, 10],
   });
 };
 
@@ -52,7 +53,7 @@ const FlyToUserLocation = ({ position }: { position: [number, number] }) => {
   const map = useMap();
   
   useEffect(() => {
-    map.flyTo(position, 3, {
+    map.flyTo(position, 4, { // Zoom level 4 for a better view
       duration: 2
     });
   }, [map, position]);
@@ -108,7 +109,7 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
               box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
             }
             70% {
-              box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+              box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
             }
             100% {
               box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
@@ -117,7 +118,8 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           
           .leaflet-popup-content-wrapper {
             border-radius: 0.5rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
           }
           
           .leaflet-popup-content {

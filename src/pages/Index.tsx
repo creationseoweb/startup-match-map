@@ -41,8 +41,8 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header onMessagesClick={handleMessagingClick} />
       
-      <main className="flex-1 flex flex-col">
-        <div className="flex-1 flex md:flex-row flex-col">
+      <main className="flex-1 flex flex-col h-[calc(100vh-64px)]">
+        <div className="flex-1 flex md:flex-row flex-col h-full">
           <Tabs defaultValue="map" className="flex-1 flex flex-col h-full">
             <div className="px-4 pt-4 flex justify-between items-center">
               <TabsList>
@@ -60,7 +60,7 @@ const Index = () => {
             </div>
             
             <TabsContent value="map" className="flex-1 p-4 pt-0 h-full">
-              <div className="h-full">
+              <div className="h-full w-full">
                 <MapView onUserSelect={handleUserSelect} />
               </div>
             </TabsContent>
@@ -75,9 +75,9 @@ const Index = () => {
             </TabsContent>
           </Tabs>
           
-          {/* Selected user profile panel */}
+          {/* Selected user profile panel - make it smaller and collapsible to give more space to map */}
           {selectedUser && (
-            <div className="w-96 border-l border-border p-4 overflow-y-auto animate-fade-in hidden md:block">
+            <div className="w-80 border-l border-border p-4 overflow-y-auto animate-fade-in hidden md:block">
               <ProfileCard 
                 user={selectedUser} 
                 onMessageClick={() => handleMessageUser(selectedUser)} 
