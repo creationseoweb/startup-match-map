@@ -1,5 +1,6 @@
+
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useUser } from '@/context/UserContext';
@@ -136,12 +137,37 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           .marker-container {
             cursor: pointer;
           }
+          
+          /* Legend styles */
+          .map-legend {
+            background-color: white;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            font-size: 12px;
+            max-width: 200px;
+            z-index: 1000;
+          }
+          
+          .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+          }
+          
+          .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+            border: 1px solid rgba(0,0,0,0.1);
+          }
         `}
       </style>
       
       <MapContainer
         center={getInitialCenter()}
-        zoom={2}
+        zoom={3}
         style={{ height: '100%', width: '100%' }}
         zoomControl={false}
         attributionControl={false}
@@ -151,6 +177,9 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        
+        {/* Add zoom control at top-right corner */}
+        <ZoomControl position="topright" />
         
         {/* Current user marker with pulse animation */}
         {currentUser?.location && (
@@ -186,6 +215,35 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           ) : null
         )}
       </MapContainer>
+      
+      {/* Map legend */}
+      <div className="absolute bottom-3 left-3 map-legend">
+        <div className="font-medium mb-1">User Types</div>
+        <div className="legend-item">
+          <div className="legend-color" style={{ backgroundColor: getRoleColor('developer') }}></div>
+          <span>Developer</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color" style={{ backgroundColor: getRoleColor('designer') }}></div>
+          <span>Designer</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color" style={{ backgroundColor: getRoleColor('business') }}></div>
+          <span>Business</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color" style={{ backgroundColor: getRoleColor('marketing') }}></div>
+          <span>Marketing</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color" style={{ backgroundColor: getRoleColor('founder') }}></div>
+          <span>Founder</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color" style={{ backgroundColor: getRoleColor('investor') }}></div>
+          <span>Investor</span>
+        </div>
+      </div>
     </div>
   );
 };

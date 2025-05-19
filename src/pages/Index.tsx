@@ -76,7 +76,7 @@ const Index = () => {
           
           {/* Selected user profile panel - make it smaller to give more space to map */}
           {selectedUser && (
-            <div className="w-72 border-l border-border p-4 overflow-y-auto animate-fade-in hidden md:block">
+            <div className="w-80 border-l border-border p-4 overflow-y-auto animate-fade-in hidden md:block">
               <ProfileCard 
                 user={selectedUser} 
                 onMessageClick={() => handleMessageUser(selectedUser)} 
