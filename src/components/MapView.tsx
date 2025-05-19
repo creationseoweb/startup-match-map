@@ -1,6 +1,5 @@
-
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useUser } from '@/context/UserContext';
@@ -27,7 +26,7 @@ const createCustomIcon = (role: string, isPulsing: boolean = false): L.DivIcon =
       height: 100%;
       box-shadow: 0 0 0 2px rgba(0,0,0,0.1);"
     ></div>`,
-    iconSize: isPulsing ? [32, 32] : [24, 24], // Larger markers for better visibility
+    iconSize: isPulsing ? [32, 32] : [24, 24],
     iconAnchor: isPulsing ? [16, 16] : [12, 12],
   });
 };
@@ -43,22 +42,15 @@ const getRoleColor = (role: string): string => {
       return '#10b981'; // emerald-500
     case 'marketing':
       return '#f59e0b'; // amber-500
+    case 'founder':
+      return '#8b5cf6'; // purple-500
+    case 'advisor':
+      return '#14b8a6'; // teal-500
+    case 'investor':
+      return '#f43f5e'; // rose-500
     default:
       return '#6366f1'; // indigo-500
   }
-};
-
-// Component to automatically fly to user location
-const FlyToUserLocation = ({ position }: { position: [number, number] }) => {
-  const map = useMap();
-  
-  useEffect(() => {
-    map.flyTo(position, 3, { 
-      duration: 1.5
-    });
-  }, [map, position]);
-  
-  return null;
 };
 
 const MapView = ({ onUserSelect }: MapViewProps) => {
@@ -116,13 +108,13 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           
           @keyframes pulse {
             0% {
-              box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+              box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
             }
             70% {
-              box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
+              box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
             }
             100% {
-              box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+              box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
             }
           }
           
@@ -160,23 +152,18 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {/* Add zoom control to top-right */}
-        <div className="leaflet-top leaflet-right">
-          <div className="leaflet-control-zoom leaflet-bar leaflet-control">
-            <a className="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in">+</a>
-            <a className="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out">−</a>
-          </div>
-        </div>
-        
         {/* Current user marker with pulse animation */}
         {currentUser?.location && (
-          <>
-            <Marker
-              position={[currentUser.location.latitude, currentUser.location.longitude]}
-              icon={createCustomIcon(currentUser.role, true)}
-            />
-            <FlyToUserLocation position={[currentUser.location.latitude, currentUser.location.longitude]} />
-          </>
+          <Marker
+            position={[currentUser.location.latitude, currentUser.location.longitude]}
+            icon={createCustomIcon(currentUser.role, true)}
+          >
+            <Popup closeButton={false} autoClose={false} className="custom-popup">
+              <div className="w-full">
+                <ProfileCard user={currentUser} compact={true} />
+              </div>
+            </Popup>
+          </Marker>
         )}
         
         {/* Other users markers */}
@@ -190,13 +177,11 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
                 click: () => handleMarkerClick(user),
               }}
             >
-              {selectedUser?.id === user.id && (
-                <Popup closeButton={true} autoClose={false} className="custom-popup">
-                  <div className="w-full">
-                    <ProfileCard user={user} compact />
-                  </div>
-                </Popup>
-              )}
+              <Popup closeButton={false} autoClose={false} className="custom-popup">
+                <div className="w-full">
+                  <ProfileCard user={user} compact={true} />
+                </div>
+              </Popup>
             </Marker>
           ) : null
         )}
