@@ -83,9 +83,20 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
     const timer = setTimeout(() => {
       console.log("Setting mapReady to true");
       setMapReady(true);
-    }, 500);
+    }, 100); // reduced timeout for faster rendering
 
     return () => clearTimeout(timer);
+  }, []);
+
+  // Ensure Leaflet has proper icon images by fixing the icon paths
+  useEffect(() => {
+    // Fix Leaflet's default icon paths
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    });
   }, []);
 
   if (!mapReady) {
@@ -95,75 +106,73 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
 
   return (
     <div className="relative w-full h-full rounded-lg overflow-hidden border border-border">
-      <style>
-        {`
-          .leaflet-container {
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+      <style jsx>{`
+        .leaflet-container {
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+        
+        .pulse-animation {
+          animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
           }
-          
-          .pulse-animation {
-            animation: pulse 2s infinite;
+          70% {
+            box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
           }
-          
-          @keyframes pulse {
-            0% {
-              box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
-            }
-            70% {
-              box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
-            }
-            100% {
-              box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
-            }
+          100% {
+            box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
           }
-          
-          .leaflet-popup-content-wrapper {
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            min-width: 240px;
-          }
-          
-          .leaflet-popup-content {
-            margin: 0;
-            padding: 0;
-          }
-          
-          .leaflet-popup-tip {
-            background-color: #fff;
-          }
-          
-          .marker-container {
-            cursor: pointer;
-          }
-          
-          /* Legend styles */
-          .map-legend {
-            background-color: white;
-            padding: 8px;
-            border-radius: 4px;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            font-size: 12px;
-            max-width: 200px;
-            z-index: 1000;
-          }
-          
-          .legend-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 4px;
-          }
-          
-          .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 6px;
-            border: 1px solid rgba(0,0,0,0.1);
-          }
-        `}
-      </style>
+        }
+        
+        .leaflet-popup-content-wrapper {
+          border-radius: 0.5rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          min-width: 240px;
+        }
+        
+        .leaflet-popup-content {
+          margin: 0;
+          padding: 0;
+        }
+        
+        .leaflet-popup-tip {
+          background-color: #fff;
+        }
+        
+        .marker-container {
+          cursor: pointer;
+        }
+        
+        /* Legend styles */
+        .map-legend {
+          background-color: white;
+          padding: 8px;
+          border-radius: 4px;
+          box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+          font-size: 12px;
+          max-width: 200px;
+          z-index: 1000;
+        }
+        
+        .legend-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 4px;
+        }
+        
+        .legend-color {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          margin-right: 6px;
+          border: 1px solid rgba(0,0,0,0.1);
+        }
+      `}</style>
       
       <MapContainer
         center={getInitialCenter()}

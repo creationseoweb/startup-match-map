@@ -60,7 +60,7 @@ const Index = () => {
               </Button>
             </div>
             
-            <TabsContent value="map" className="flex-1 p-4 pt-0 h-full overflow-hidden">
+            <TabsContent value="map" className="flex-1 p-4 pt-2 h-full overflow-hidden">
               <div className="h-full w-full rounded-lg">
                 <MapView onUserSelect={handleUserSelect} />
               </div>
