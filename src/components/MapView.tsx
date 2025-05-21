@@ -83,7 +83,7 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
     const timer = setTimeout(() => {
       console.log("Setting mapReady to true");
       setMapReady(true);
-    }, 100); // reduced timeout for faster rendering
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);

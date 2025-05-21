@@ -44,7 +44,7 @@ const Index = () => {
       
       <main className="flex-1 flex flex-col h-[calc(100vh-64px)]">
         <div className="flex-1 flex md:flex-row flex-col h-full">
-          <Tabs defaultValue="map" className="flex-1 flex flex-col h-full overflow-hidden">
+          <Tabs defaultValue="map" className="flex-1 flex flex-col h-full">
             <div className="px-4 pt-4 flex justify-between items-center">
               <TabsList>
                 <TabsTrigger value="map" className="flex items-center gap-1">
@@ -60,7 +60,7 @@ const Index = () => {
               </Button>
             </div>
             
-            <TabsContent value="map" className="flex-1 p-4 pt-2 h-full overflow-hidden">
+            <TabsContent value="map" className="flex-1 p-4 pt-2 h-full">
               <div className="h-full w-full rounded-lg">
                 <MapView onUserSelect={handleUserSelect} />
               </div>
