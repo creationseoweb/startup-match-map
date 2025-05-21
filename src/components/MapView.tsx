@@ -106,7 +106,8 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
 
   return (
     <div className="relative w-full h-full rounded-lg overflow-hidden border border-border">
-      <style jsx>{`
+      <style>
+        {`
         .leaflet-container {
           width: 100%;
           height: 100%;
@@ -172,7 +173,8 @@ const MapView = ({ onUserSelect }: MapViewProps) => {
           margin-right: 6px;
           border: 1px solid rgba(0,0,0,0.1);
         }
-      `}</style>
+        `}
+      </style>
       
       <MapContainer
         center={getInitialCenter()}
